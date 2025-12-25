@@ -210,10 +210,10 @@ export default function VerifiedTravelsPage() {
           }
         }
       ]
-      
+
       setTravels(mockTravels)
       setFilteredTravels(mockTravels)
-      
+
       // Mock data for My Travels
       const mockMyTravels: MyTravel[] = [
         {
@@ -240,7 +240,7 @@ export default function VerifiedTravelsPage() {
         }
       ]
       setMyTravels(mockMyTravels)
-      
+
       // Mock data for Vehicles
       const mockVehicles: Vehicle[] = [
         {
@@ -275,7 +275,7 @@ export default function VerifiedTravelsPage() {
         }
       ]
       setVehicles(mockVehicles)
-      
+
       // Mock data for Drivers
       const mockDrivers: Driver[] = [
         {
@@ -310,7 +310,7 @@ export default function VerifiedTravelsPage() {
         }
       ]
       setDrivers(mockDrivers)
-      
+
     } catch (error) {
       console.error('Error fetching travels:', error)
     } finally {
@@ -365,9 +365,8 @@ export default function VerifiedTravelsPage() {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${
-          i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-        }`}
+        className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+          }`}
       />
     ))
   }
@@ -418,7 +417,7 @@ export default function VerifiedTravelsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -442,11 +441,10 @@ export default function VerifiedTravelsPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
-                      activeTab === tab.id
+                    className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.id
                         ? 'border-blue-500 text-blue-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
+                      }`}
                   >
                     <IconComponent className="h-4 w-4" />
                     <span>{tab.label}</span>
@@ -471,7 +469,7 @@ export default function VerifiedTravelsPage() {
               <span className="font-medium text-gray-900">Add New Travel</span>
               <span className="text-sm text-gray-500 mt-1">Create a new travel package</span>
             </button>
-            
+
             <button
               onClick={() => handleAddNew('vehicle')}
               className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-400 hover:bg-green-50 transition-colors group"
@@ -482,7 +480,7 @@ export default function VerifiedTravelsPage() {
               <span className="font-medium text-gray-900">Add Vehicle</span>
               <span className="text-sm text-gray-500 mt-1">Register a new vehicle</span>
             </button>
-            
+
             <button
               onClick={() => handleAddNew('driver')}
               className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-400 hover:bg-purple-50 transition-colors group"
@@ -512,7 +510,7 @@ export default function VerifiedTravelsPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex items-center">
                   <div className="p-2 bg-green-100 rounded-lg">
@@ -524,7 +522,7 @@ export default function VerifiedTravelsPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex items-center">
                   <div className="p-2 bg-purple-100 rounded-lg">
@@ -536,7 +534,7 @@ export default function VerifiedTravelsPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex items-center">
                   <div className="p-2 bg-yellow-100 rounded-lg">
@@ -583,7 +581,7 @@ export default function VerifiedTravelsPage() {
                 <Filter className="h-5 w-5 text-gray-400" />
                 <h2 className="text-lg font-semibold text-gray-900">Filter Travel Packages</h2>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Search */}
                 <div>
@@ -662,13 +660,13 @@ export default function VerifiedTravelsPage() {
                     {/* Travel Header with Image */}
                     <div className="relative">
                       <div className="h-48 relative overflow-hidden">
-                        <img 
-                          src={travel.images[0]} 
+                        <img
+                          src={travel.images[0]}
                           alt={travel.title}
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        
+
                         {/* Verified Badge */}
                         <div className="absolute top-4 left-4 bg-green-600 text-white rounded-full px-3 py-1 flex items-center space-x-1">
                           <Shield className="h-3 w-3" />
@@ -701,12 +699,12 @@ export default function VerifiedTravelsPage() {
                       <div className="mb-4">
                         <h3 className="text-xl font-bold text-gray-900 mb-2">{travel.title}</h3>
                         <p className="text-gray-600 text-sm mb-3 leading-relaxed">{travel.description}</p>
-                        
+
                         <div className="flex items-center text-sm text-gray-600 mb-2">
                           <MapPin className="h-4 w-4 mr-1" />
                           <span>{travel.destinations.join(', ')}</span>
                         </div>
-                        
+
                         <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
                           <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-1" />
@@ -779,7 +777,7 @@ export default function VerifiedTravelsPage() {
                             <span>View Details</span>
                           </button>
                         </div>
-                        <Link 
+                        <Link
                           href={`/travel/${travel._id}`}
                           className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
                         >
@@ -917,7 +915,7 @@ export default function VerifiedTravelsPage() {
                 Add New {modalType === 'travel' ? 'Travel Package' : modalType === 'vehicle' ? 'Vehicle' : 'Driver'}
               </h3>
               <p className="text-gray-600 mb-4">
-                This feature will be available soon. You'll be able to add new {modalType}s directly from this interface.
+                This feature will be available soon. You&apos;ll be able to add new {modalType}s directly from this interface.
               </p>
               <div className="flex justify-end space-x-3">
                 <button
