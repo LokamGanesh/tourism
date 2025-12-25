@@ -9,10 +9,10 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect()
     console.log('Database connected')
-    
+
     const { identifier, password } = await request.json()
     console.log('Login attempt with identifier:', identifier)
-    
+
     if (!identifier || !password) {
       return NextResponse.json(
         { error: 'Email/Mobile and password are required' },
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Determine if identifier is email or mobile
     const isEmail = identifier.includes('@')
     let query: any = {}
-    
+
     if (isEmail) {
       query.email = identifier.toLowerCase()
     } else {
@@ -35,8 +35,8 @@ export async function POST(request: NextRequest) {
     console.log('Searching user with query:', query)
 
     // Find user by email or mobile
-    const user = await User.findOne(query) as IUser | null
-    
+    const user = await (User as any).findOne(query) as IUser | null
+
     if (!user) {
       return NextResponse.json(
         { error: 'No account found with this email/mobile number' },
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password)
-    
+
     if (!isValidPassword) {
       return NextResponse.json(
         { error: 'Invalid password' },

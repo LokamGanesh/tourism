@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
     // Try database first
     try {
       await dbConnect()
-      const dbUser = await User.findOne({ email }).exec()
-      
+      const dbUser = await (User as any).findOne({ email }).exec()
+
       if (dbUser) {
         // Verify password with database user
         const isValidPassword = await verifyPassword(password, dbUser.password)
@@ -95,10 +95,10 @@ export async function POST(request: NextRequest) {
     if (!user) {
       console.log('Trying fallback authentication for:', email)
       console.log('Available fallback users:', Object.keys(FALLBACK_USERS))
-      
+
       const fallbackUser = FALLBACK_USERS[email as keyof typeof FALLBACK_USERS]
       console.log('Found fallback user:', fallbackUser ? 'Yes' : 'No')
-      
+
       if (!fallbackUser || fallbackUser.password !== password) {
         console.log('Fallback authentication failed - User:', !!fallbackUser, 'Password match:', fallbackUser?.password === password)
         return NextResponse.json(
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
           { status: 401 }
         )
       }
-      
+
       user = fallbackUser
       console.log('Fallback authentication successful for:', user.name)
     }

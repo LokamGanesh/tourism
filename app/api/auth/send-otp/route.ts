@@ -8,10 +8,10 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect()
     console.log('Database connected')
-    
+
     const { mobile, type } = await request.json()
     console.log('Request data:', { mobile, type })
-    
+
     if (!mobile) {
       console.log('Mobile number missing')
       return NextResponse.json(
@@ -22,10 +22,10 @@ export async function POST(request: NextRequest) {
 
     // Format mobile number (ensure it starts with country code)
     const formattedMobile = mobile.startsWith('+') ? mobile : `+91${mobile}`
-    
+
     if (type === 'signup') {
       // Check if user already exists
-      const existingUser = await User.findOne({ mobile: formattedMobile }) as IUser | null
+      const existingUser = await (User as any).findOne({ mobile: formattedMobile }) as IUser | null
       if (existingUser) {
         return NextResponse.json(
           { error: 'User with this mobile number already exists' },
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       }
     } else if (type === 'login') {
       // Check if user exists
-      const existingUser = await User.findOne({ mobile: formattedMobile }) as IUser | null
+      const existingUser = await (User as any).findOne({ mobile: formattedMobile }) as IUser | null
       if (!existingUser) {
         return NextResponse.json(
           { error: 'No account found with this mobile number' },
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     // Try to send OTP using Twilio Verify Service first
     let otpSent = false
-    
+
     try {
       otpSent = await sendOTP(formattedMobile)
     } catch (error) {
@@ -59,14 +59,14 @@ export async function POST(request: NextRequest) {
 
       // Store OTP in database for manual verification
       if (type === 'login') {
-        await User.updateOne(
+        await (User as any).updateOne(
           { mobile: formattedMobile },
           { otp, otpExpiry }
         )
       }
 
       otpSent = await sendManualOTP(formattedMobile, otp)
-      
+
       if (otpSent) {
         return NextResponse.json({
           success: true,

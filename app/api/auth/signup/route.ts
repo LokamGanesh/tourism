@@ -6,7 +6,7 @@ import { hashPassword } from '@/lib/auth'
 export async function POST(request: NextRequest) {
   try {
     await dbConnect()
-    
+
     const body = await request.json()
     const { email, password, name, role, ...additionalData } = body
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email })
+    const existingUser = await (User as any).findOne({ email })
     if (existingUser) {
       return NextResponse.json(
         { error: 'User already exists' },
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create user
-    const user = new User(userData)
+    const user = new (User as any)(userData)
     await user.save()
 
     // Remove password from response

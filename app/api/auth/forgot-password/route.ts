@@ -8,10 +8,10 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect()
     console.log('Database connected')
-    
+
     const { identifier } = await request.json()
     console.log('Forgot password request for:', identifier)
-    
+
     if (!identifier) {
       return NextResponse.json(
         { error: 'Email or mobile number is required' },
@@ -23,15 +23,15 @@ export async function POST(request: NextRequest) {
     const isEmail = identifier.includes('@')
     let query: any = {}
     let user: IUser | null = null
-    
+
     if (isEmail) {
       query.email = identifier.toLowerCase()
-      user = await User.findOne(query) as IUser | null
+      user = await (User as any).findOne(query) as IUser | null
     } else {
       // Format mobile number
       const formattedMobile = identifier.startsWith('+') ? identifier : `+91${identifier}`
       query.mobile = formattedMobile
-      user = await User.findOne(query) as IUser | null
+      user = await (User as any).findOne(query) as IUser | null
     }
 
     if (!user) {
@@ -54,10 +54,10 @@ export async function POST(request: NextRequest) {
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
 
     // Store OTP in database
-    await User.updateOne(
+    await (User as any).updateOne(
       { _id: user._id },
-      { 
-        otp, 
+      {
+        otp,
         otpExpiry,
         resetPasswordToken: otp // Use OTP as reset token
       }
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     // Send OTP via SMS
     const otpSent = await sendManualOTP(user.mobile, otp)
-    
+
     if (!otpSent) {
       return NextResponse.json(
         { error: 'Failed to send OTP. Please try again.' },

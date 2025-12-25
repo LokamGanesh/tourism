@@ -10,10 +10,10 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect()
     console.log('Database connected')
-    
+
     const { mobile, otp, type, userData } = await request.json()
     console.log('Request data:', { mobile, otp: otp ? '***' : null, type })
-    
+
     if (!mobile || !otp) {
       console.log('Missing mobile or OTP')
       return NextResponse.json(
@@ -34,11 +34,11 @@ export async function POST(request: NextRequest) {
 
     // If Twilio Verify Service fails, check manual OTP
     if (!isValidOTP && type === 'login') {
-      const user = await User.findOne({ mobile: formattedMobile }) as IUser | null
+      const user = await (User as any).findOne({ mobile: formattedMobile }) as IUser | null
       if (user && user.otp === otp && user.otpExpiry && user.otpExpiry > new Date()) {
         isValidOTP = true
         // Clear OTP after successful verification
-        await User.updateOne(
+        await (User as any).updateOne(
           { mobile: formattedMobile },
           { $unset: { otp: 1, otpExpiry: 1 } }
         )
@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
       }
 
       const hashedPassword = await bcrypt.hash(userData.password, 12)
-      
-      const newUser = new User({
+
+      const newUser = new (User as any)({
         mobile: formattedMobile,
         email: userData.email || undefined,
         name: userData.name,
@@ -104,8 +104,8 @@ export async function POST(request: NextRequest) {
 
     } else if (type === 'login') {
       // Login existing user
-      const user = await User.findOne({ mobile: formattedMobile }) as IUser | null
-      
+      const user = await (User as any).findOne({ mobile: formattedMobile }) as IUser | null
+
       if (!user) {
         return NextResponse.json(
           { error: 'User not found' },

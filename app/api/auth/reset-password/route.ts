@@ -8,10 +8,10 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect()
     console.log('Database connected')
-    
+
     const { identifier, otp, newPassword } = await request.json()
     console.log('Reset password attempt for:', identifier)
-    
+
     if (!identifier || !otp || !newPassword) {
       return NextResponse.json(
         { error: 'All fields are required' },
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Find user by email or mobile
     const isEmail = identifier.includes('@')
     let query: any = {}
-    
+
     if (isEmail) {
       query.email = identifier.toLowerCase()
     } else {
@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
       query.mobile = formattedMobile
     }
 
-    const user = await User.findOne(query) as IUser | null
-    
+    const user = await (User as any).findOne(query) as IUser | null
+
     if (!user) {
       return NextResponse.json(
         { error: 'User not found' },
@@ -72,14 +72,14 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(newPassword, 12)
 
     // Update password and clear OTP
-    await User.updateOne(
+    await (User as any).updateOne(
       { _id: user._id },
-      { 
+      {
         password: hashedPassword,
-        $unset: { 
-          otp: 1, 
-          otpExpiry: 1, 
-          resetPasswordToken: 1 
+        $unset: {
+          otp: 1,
+          otpExpiry: 1,
+          resetPasswordToken: 1
         }
       }
     )
