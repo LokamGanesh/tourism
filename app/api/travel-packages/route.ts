@@ -7,10 +7,10 @@ import jwt from 'jsonwebtoken'
 export async function GET(request: NextRequest) {
   try {
     await connectDB()
-    
+
     const { searchParams } = new URL(request.url)
     const providerId = searchParams.get('providerId')
-    
+
     // Mock data for now - in real implementation, fetch from database
     const mockPackages = [
       {
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         providerId: providerId || 'provider1'
       }
     ]
-    
+
     return NextResponse.json(mockPackages)
   } catch (error) {
     console.error('Error fetching travel packages:', error)
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     await connectDB()
-    
+
     const authHeader = request.headers.get('authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -79,21 +79,21 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
-    
+
     const token = authHeader.split(' ')[1]
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any
-    
+
     // Verify user is a travel provider
-    const user = await User.findById(decoded.userId)
+    const user = await (User as any).findById(decoded.userId)
     if (!user || user.role !== 'travel_provider') {
       return NextResponse.json(
         { error: 'Unauthorized - Travel provider access required' },
         { status: 403 }
       )
     }
-    
+
     const packageData = await request.json()
-    
+
     // In real implementation, save to database
     // For now, return mock response
     const newPackage = {
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-    
+
     return NextResponse.json(newPackage, { status: 201 })
   } catch (error) {
     console.error('Error creating travel package:', error)
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     await connectDB()
-    
+
     const authHeader = request.headers.get('authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -129,28 +129,28 @@ export async function PUT(request: NextRequest) {
         { status: 401 }
       )
     }
-    
+
     const token = authHeader.split(' ')[1]
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any
-    
+
     // Verify user is a travel provider
-    const user = await User.findById(decoded.userId)
+    const user = await (User as any).findById(decoded.userId)
     if (!user || user.role !== 'travel_provider') {
       return NextResponse.json(
         { error: 'Unauthorized - Travel provider access required' },
         { status: 403 }
       )
     }
-    
+
     const packageData = await request.json()
-    
+
     // In real implementation, update in database
     // For now, return mock response
     const updatedPackage = {
       ...packageData,
       updatedAt: new Date()
     }
-    
+
     return NextResponse.json(updatedPackage)
   } catch (error) {
     console.error('Error updating travel package:', error)
