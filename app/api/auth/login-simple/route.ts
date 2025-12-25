@@ -214,6 +214,20 @@ export async function POST(request: NextRequest) {
       },
       // User's specific mobile number
       { 
+        identifier: '8897536435', 
+        mobile: '+918897536435',
+        password: 'sagar123', 
+        name: 'Sagar', 
+        role: 'tourist' 
+      },
+      { 
+        identifier: '+918897536435', 
+        mobile: '+918897536435',
+        password: 'sagar123', 
+        name: 'Sagar', 
+        role: 'tourist' 
+      },
+      { 
         identifier: '9494453388', 
         mobile: '+919494453388',
         password: 'test123', 

@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs');
 
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
+
 // Database connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/jharkhand-tourism';
 
@@ -21,6 +24,12 @@ const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 // Brand New Login Credentials for All User Types
 const USER_CREDENTIALS = {
+  custom_user: {
+    email: '8897536435',
+    password: 'sagar123',
+    name: 'Sagar',
+    role: 'tourist'
+  },
   tourist: {
     email: 'tourist@test.com',
     password: 'test123',
@@ -65,7 +74,7 @@ async function initDefaultUsers() {
   try {
     await mongoose.connect(MONGODB_URI);
     console.log('🔗 Connected to database');
-    
+
     // Clear existing users first
     await User.deleteMany({});
     console.log('🗑️  Cleared existing users');
@@ -77,7 +86,7 @@ async function initDefaultUsers() {
         password: await hashPassword(credentials.password),
         isVerified: true
       };
-      
+
       const user = new User(userData);
       await user.save();
       console.log(`✅ ${userType.charAt(0).toUpperCase() + userType.slice(1)} user created: ${credentials.name}`);
@@ -86,29 +95,34 @@ async function initDefaultUsers() {
     console.log('\n' + '='.repeat(70));
     console.log('🔑 FRESH LOGIN CREDENTIALS FOR ALL USER TYPES');
     console.log('='.repeat(70));
-    
+
+    console.log('\n🎯 YOUR CUSTOM LOGIN:');
+    console.log(`Email/Mobile: ${USER_CREDENTIALS.custom_user.email}`);
+    console.log(`Password: ${USER_CREDENTIALS.custom_user.password}`);
+    console.log(`Name: ${USER_CREDENTIALS.custom_user.name}`);
+
     console.log('\n👤 TOURIST LOGIN:');
     console.log(`Email: ${USER_CREDENTIALS.tourist.email}`);
     console.log(`Password: ${USER_CREDENTIALS.tourist.password}`);
     console.log(`Name: ${USER_CREDENTIALS.tourist.name}`);
-    
+
     console.log('\n🗺️  TRAVEL GUIDE LOGIN:');
     console.log(`Email: ${USER_CREDENTIALS.travel_guide.email}`);
     console.log(`Password: ${USER_CREDENTIALS.travel_guide.password}`);
     console.log(`Name: ${USER_CREDENTIALS.travel_guide.name}`);
     console.log(`License: ${USER_CREDENTIALS.travel_guide.licenseNumber}`);
-    
+
     console.log('\n📋 ADMIN LOGIN:');
     console.log(`Email: ${USER_CREDENTIALS.admin.email}`);
     console.log(`Password: ${USER_CREDENTIALS.admin.password}`);
     console.log(`Name: ${USER_CREDENTIALS.admin.name}`);
-    
+
     console.log('\n🏛️  GOVERNMENT LOGIN:');
     console.log(`Email: ${USER_CREDENTIALS.government.email}`);
     console.log(`Password: ${USER_CREDENTIALS.government.password}`);
     console.log(`Name: ${USER_CREDENTIALS.government.name}`);
     console.log(`Position: ${USER_CREDENTIALS.government.position}`);
-    
+
     console.log('\n' + '='.repeat(70));
     console.log('✨ All users created successfully!');
     console.log('🚀 Ready to login with any of the above credentials');

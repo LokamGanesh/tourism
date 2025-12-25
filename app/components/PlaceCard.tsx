@@ -6,10 +6,11 @@ import Image from 'next/image'
 import { MapPin, Star, Clock, Users, DollarSign, Camera, Navigation, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Place {
-  id: number
+  _id?: string
+  id: string | number
   name: string
   location: string
-  image: string
+  image?: string
   images?: string[]
   rating: number
   reviews: number
@@ -29,7 +30,7 @@ interface PlaceCardProps {
 export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const images = place.images || [place.image]
-  
+
   const handleGetDirections = () => {
     const mapUrl = `/map?name=${encodeURIComponent(place.name)}&lat=${place.coordinates[0]}&lng=${place.coordinates[1]}&address=${encodeURIComponent(place.location)}`
     window.location.href = mapUrl
@@ -63,7 +64,7 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
                 {place.category}
               </span>
             </div>
-            
+
             {/* Image Gallery Controls */}
             {images.length > 1 && (
               <>
@@ -79,20 +80,19 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
-                
+
                 {/* Image Indicators */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                   {images.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
+                      className={`w-2 h-2 rounded-full transition-all ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                        }`}
                     />
                   ))}
                 </div>
-                
+
                 {/* Image Counter */}
                 <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded-full text-xs">
                   {currentImageIndex + 1}/{images.length}
@@ -100,7 +100,7 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
               </>
             )}
           </div>
-          
+
           <div className="md:w-2/3 p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -119,11 +119,11 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
                 <Camera className="h-5 w-5 text-gray-600" />
               </button>
             </div>
-            
+
             <p className="text-gray-600 mb-4 leading-relaxed">
               {place.description}
             </p>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-primary-600" />
@@ -147,15 +147,15 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Link
-                href={`/places/${place.id}`}
+                href={`/places/${place._id || place.id}`}
                 className="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 View Details
               </Link>
-              <button 
+              <button
                 onClick={handleGetDirections}
                 className="flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-medium"
               >
@@ -188,7 +188,7 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
             {place.category}
           </span>
         </div>
-        
+
         {/* Image Gallery Controls */}
         {images.length > 1 && (
           <>
@@ -204,27 +204,26 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
             >
               <ChevronRight className="h-3 w-3" />
             </button>
-            
+
             {/* Image Indicators */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1">
               {images.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`w-1.5 h-1.5 rounded-full transition-all ${
-                    index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                  }`}
+                  className={`w-1.5 h-1.5 rounded-full transition-all ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                    }`}
                 />
               ))}
             </div>
-            
+
             {/* Image Counter */}
             <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded-full text-xs">
               {currentImageIndex + 1}/{images.length}
             </div>
           </>
         )}
-        
+
         {/* Camera Icon */}
         <div className="absolute bottom-4 right-4">
           <div className="bg-white/20 backdrop-blur-md p-2 rounded-full text-white">
@@ -232,7 +231,7 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
           </div>
         </div>
       </div>
-      
+
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xl font-bold text-gray-900">{place.name}</h3>
@@ -241,16 +240,16 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
             <span className="text-sm font-medium text-gray-700">{place.rating}</span>
           </div>
         </div>
-        
+
         <div className="flex items-center text-gray-600 mb-3">
           <MapPin className="h-4 w-4 mr-1" />
           <span className="text-sm">{place.location}</span>
         </div>
-        
+
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
           {place.description}
         </p>
-        
+
         <div className="space-y-2 mb-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Best Time:</span>
@@ -261,7 +260,7 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
             <span className="font-medium text-green-600">{place.entryFee}</span>
           </div>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-500">
             {place.reviews} reviews
@@ -275,7 +274,7 @@ export default function PlaceCard({ place, viewMode }: PlaceCardProps) {
               <Navigation className="h-3 w-3" />
             </button>
             <Link
-              href={`/places/${place.id}`}
+              href={`/places/${place._id || place.id}`}
               className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
             >
               Explore

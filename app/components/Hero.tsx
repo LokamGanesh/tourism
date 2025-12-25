@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  
+
   const slides = [
     {
       image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
@@ -33,14 +33,13 @@ export default function Hero() {
   }, [slides.length])
 
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
       {/* Background Slides */}
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
         >
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -60,10 +59,10 @@ export default function Hero() {
             {slides[currentSlide].subtitle}
           </p>
           <p className="text-lg mb-12 max-w-2xl mx-auto animate-slide-up">
-            Experience the untouched beauty of Jharkhand with our comprehensive travel guide. 
+            Experience the untouched beauty of Jharkhand with our comprehensive travel guide.
             Discover hidden gems, plan your perfect trip, and create unforgettable memories.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Link
               href="/places"
@@ -114,9 +113,8 @@ export default function Hero() {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              index === currentSlide ? 'bg-white' : 'bg-white/50'
-            }`}
+            className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? 'bg-white' : 'bg-white/50'
+              }`}
           />
         ))}
       </div>

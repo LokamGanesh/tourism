@@ -5,6 +5,14 @@ import { verifyPassword, generateToken } from '@/lib/auth'
 
 // Fallback credentials for testing without database
 const FALLBACK_USERS = {
+  '8897536435': {
+    _id: 'user_custom_001',
+    email: '8897536435',
+    password: 'sagar123',
+    name: 'Sagar',
+    role: 'tourist',
+    isVerified: true
+  },
   'tourist@test.com': {
     _id: 'tourist_001',
     email: 'tourist@test.com',
@@ -66,7 +74,7 @@ export async function POST(request: NextRequest) {
     // Try database first
     try {
       await dbConnect()
-      const dbUser = await User.findOne({ email })
+      const dbUser = await User.findOne({ email }).exec()
       
       if (dbUser) {
         // Verify password with database user
@@ -85,9 +93,14 @@ export async function POST(request: NextRequest) {
 
     // If no database user found, try fallback users
     if (!user) {
+      console.log('Trying fallback authentication for:', email)
+      console.log('Available fallback users:', Object.keys(FALLBACK_USERS))
+      
       const fallbackUser = FALLBACK_USERS[email as keyof typeof FALLBACK_USERS]
+      console.log('Found fallback user:', fallbackUser ? 'Yes' : 'No')
       
       if (!fallbackUser || fallbackUser.password !== password) {
+        console.log('Fallback authentication failed - User:', !!fallbackUser, 'Password match:', fallbackUser?.password === password)
         return NextResponse.json(
           { error: 'Invalid credentials' },
           { status: 401 }
@@ -95,6 +108,7 @@ export async function POST(request: NextRequest) {
       }
       
       user = fallbackUser
+      console.log('Fallback authentication successful for:', user.name)
     }
 
     // Check if user is verified (for travel guides)

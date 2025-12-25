@@ -18,7 +18,7 @@ export default function MainPage() {
     // Check if user is logged in
     const userData = localStorage.getItem('user')
     const token = localStorage.getItem('token')
-    
+
     if (!userData || !token) {
       // If not logged in, redirect to welcome page
       router.push('/welcome')
@@ -26,7 +26,7 @@ export default function MainPage() {
     }
 
     const parsedUser = JSON.parse(userData)
-    
+
     // Only allow tourists to access this page
     if (parsedUser.role !== 'tourist') {
       // Redirect other roles to their respective dashboards
@@ -61,7 +61,7 @@ export default function MainPage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen pt-16">
       <Navbar user={user} />
       <Hero />
       <FeaturedPlaces />

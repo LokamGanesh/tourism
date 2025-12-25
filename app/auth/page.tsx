@@ -53,7 +53,7 @@ export default function AuthPage() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const mode = urlParams.get('mode')
-    
+
     if (mode === 'login') {
       setIsLogin(true)
     } else if (mode === 'signup') {
@@ -376,7 +376,7 @@ export default function AuthPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (forgotPasswordMode) {
       await handleForgotPassword()
     } else if (resetPasswordMode) {
@@ -405,7 +405,7 @@ export default function AuthPage() {
 
   const subRoleOptions = {
     travel_provider: 'Travel Services',
-    hotel_provider: 'Hotel Services', 
+    hotel_provider: 'Hotel Services',
     restaurant_provider: 'Restaurant Services'
   }
 
@@ -420,7 +420,7 @@ export default function AuthPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">Jharkhand Tourism</h1>
-              <p className="text-xs text-gray-600">Explore the Heart of India</p>
+              <p className="text-sm text-gray-800">Explore the Heart of India</p>
             </div>
           </Link>
         </div>
@@ -436,9 +436,8 @@ export default function AuthPage() {
                   setOtpStep(false)
                   setError('')
                 }}
-                className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
-                  isLogin ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'
-                }`}
+                className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${isLogin ? 'bg-white text-blue-800 shadow-sm' : 'text-gray-800'
+                  }`}
               >
                 Login
               </button>
@@ -448,9 +447,8 @@ export default function AuthPage() {
                   setOtpStep(false)
                   setError('')
                 }}
-                className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
-                  !isLogin ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'
-                }`}
+                className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${!isLogin ? 'bg-white text-blue-800 shadow-sm' : 'text-gray-800'
+                  }`}
               >
                 Sign Up
               </button>
@@ -460,23 +458,23 @@ export default function AuthPage() {
           {/* Forgot Password Header */}
           {forgotPasswordMode && (
             <div className="text-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Forgot Password</h3>
-              <p className="text-sm text-gray-600">Enter your email or mobile number to reset your password</p>
+              <h3 className="text-lg font-bold text-gray-900">Forgot Password</h3>
+              <p className="text-sm text-gray-800">Enter your email or mobile number to reset your password</p>
             </div>
           )}
 
           {/* Reset Password Header */}
           {resetPasswordMode && (
             <div className="text-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Reset Password</h3>
-              <p className="text-sm text-gray-600">Enter the OTP sent to your mobile and your new password</p>
+              <h3 className="text-lg font-bold text-gray-900">Reset Password</h3>
+              <p className="text-sm text-gray-800">Enter the OTP sent to your mobile and your new password</p>
             </div>
           )}
 
           {/* Role Selection (only for signup) */}
           {!isLogin && (
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-gray-900 mb-2">
                 Choose your role
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -485,16 +483,15 @@ export default function AuthPage() {
                     key={role}
                     type="button"
                     onClick={() => setSelectedRole(role as any)}
-                    className={`p-3 rounded-md border transition-all ${
-                      selectedRole === role
+                    className={`p-3 rounded-md border transition-all ${selectedRole === role
                         ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                      }`}
                   >
-                    <Icon className={`h-5 w-5 mx-auto mb-1 ${
-                      selectedRole === role ? 'text-blue-600' : 'text-gray-400'
-                    }`} />
-                    <div className="text-xs font-medium capitalize">
+                    <Icon className={`h-6 w-6 mx-auto mb-2 ${selectedRole === role ? 'text-blue-600' : 'text-gray-600'
+                      }`} />
+                    <div className={`text-sm font-bold capitalize ${selectedRole === role ? 'text-blue-800' : 'text-gray-800'
+                      }`}>
                       {role.replace('_', ' ')}
                     </div>
                   </button>
@@ -506,7 +503,7 @@ export default function AuthPage() {
           {/* Sub-role Selection (only when "others" is selected) */}
           {!isLogin && selectedRole === 'others' && (
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-gray-900 mb-2">
                 Choose your service type
               </label>
               <div className="grid grid-cols-1 gap-2">
@@ -515,13 +512,12 @@ export default function AuthPage() {
                     key={subRole}
                     type="button"
                     onClick={() => setSelectedSubRole(subRole as any)}
-                    className={`p-3 rounded-md border transition-all text-left ${
-                      selectedSubRole === subRole
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`p-3 rounded-md border transition-all text-left ${selectedSubRole === subRole
+                        ? 'border-blue-500 bg-blue-50 text-blue-900'
+                        : 'border-gray-200 hover:border-gray-300 text-gray-800'
+                      }`}
                   >
-                    <div className="text-sm font-medium">{label}</div>
+                    <div className="text-sm font-bold">{label}</div>
                   </button>
                 ))}
               </div>
@@ -532,7 +528,7 @@ export default function AuthPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Full Name
                 </label>
                 <input
@@ -549,7 +545,7 @@ export default function AuthPage() {
             {/* Email/Mobile Input for Login and Forgot Password */}
             {(isLogin || forgotPasswordMode) && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Email or Mobile Number
                 </label>
                 <input
@@ -567,7 +563,7 @@ export default function AuthPage() {
             {/* Mobile Number for Signup */}
             {!isLogin && !forgotPasswordMode && !resetPasswordMode && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Mobile Number
                 </label>
                 <input
@@ -585,7 +581,7 @@ export default function AuthPage() {
 
             {!isLogin && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Email Address (Optional)
                 </label>
                 <input
@@ -601,7 +597,7 @@ export default function AuthPage() {
 
             {otpStep && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Enter OTP
                 </label>
                 <input
@@ -635,7 +631,7 @@ export default function AuthPage() {
             {/* Password for Login */}
             {isLogin && !forgotPasswordMode && !resetPasswordMode && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -661,7 +657,7 @@ export default function AuthPage() {
             {/* Password for Signup */}
             {!isLogin && !forgotPasswordMode && !resetPasswordMode && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-bold text-gray-900 mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -689,7 +685,7 @@ export default function AuthPage() {
             {resetPasswordMode && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-bold text-gray-900 mb-1">
                     Enter OTP
                   </label>
                   <input
@@ -703,7 +699,7 @@ export default function AuthPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-bold text-gray-900 mb-1">
                     New Password
                   </label>
                   <input
@@ -717,7 +713,7 @@ export default function AuthPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-bold text-gray-900 mb-1">
                     Confirm New Password
                   </label>
                   <input
@@ -738,7 +734,7 @@ export default function AuthPage() {
               <>
                 {/* Common fields for all providers */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-bold text-gray-900 mb-1">
                     Address
                   </label>
                   <input
@@ -753,7 +749,7 @@ export default function AuthPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-bold text-gray-900 mb-1">
                     Description
                   </label>
                   <textarea
@@ -772,7 +768,7 @@ export default function AuthPage() {
                 {selectedSubRole === 'travel_provider' && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Business Name
                       </label>
                       <input
@@ -786,7 +782,7 @@ export default function AuthPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Business Type
                       </label>
                       <select
@@ -803,7 +799,7 @@ export default function AuthPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         License Number
                       </label>
                       <input
@@ -817,7 +813,7 @@ export default function AuthPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Services (comma separated)
                       </label>
                       <input
@@ -837,7 +833,7 @@ export default function AuthPage() {
                 {selectedSubRole === 'hotel_provider' && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Hotel Name
                       </label>
                       <input
@@ -851,7 +847,7 @@ export default function AuthPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Hotel Type
                       </label>
                       <select
@@ -870,7 +866,7 @@ export default function AuthPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Amenities (comma separated)
                       </label>
                       <input
@@ -890,7 +886,7 @@ export default function AuthPage() {
                 {selectedSubRole === 'restaurant_provider' && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Restaurant Name
                       </label>
                       <input
@@ -904,7 +900,7 @@ export default function AuthPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Cuisine Type (comma separated)
                       </label>
                       <input
@@ -918,7 +914,7 @@ export default function AuthPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-bold text-gray-900 mb-1">
                         Specialties (comma separated)
                       </label>
                       <input
@@ -950,9 +946,9 @@ export default function AuthPage() {
             >
               {loading ? 'Please wait...' : (
                 forgotPasswordMode ? 'Send Reset OTP' :
-                resetPasswordMode ? 'Reset Password' :
-                otpStep ? 'Verify OTP' : 
-                isLogin ? 'Login' : 'Send OTP & Sign Up'
+                  resetPasswordMode ? 'Reset Password' :
+                    otpStep ? 'Verify OTP' :
+                      isLogin ? 'Login' : 'Send OTP & Sign Up'
               )}
             </button>
 
@@ -983,9 +979,10 @@ export default function AuthPage() {
                     setOtp('')
                     setError('')
                   }}
-                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
                 >
-                  ← Back to Login
+                  <span className="text-sm text-gray-800 hover:text-blue-800 transition-colors">
+                    ← Back to Login
+                  </span>
                 </button>
               </div>
             )}
@@ -995,7 +992,7 @@ export default function AuthPage() {
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-sm text-gray-800 hover:text-blue-800 transition-colors"
             >
               ← Back to Home
             </Link>
