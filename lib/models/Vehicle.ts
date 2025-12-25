@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose'
 
-export interface IVehicle extends Document {
+export interface IVehicle extends Omit<Document, 'model'> {
   travelGuideId: mongoose.Types.ObjectId
   type: 'bus' | 'car' | 'van' | 'suv'
   make: string
