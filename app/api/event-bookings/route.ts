@@ -61,19 +61,19 @@ const EventBooking = mongoose.models.EventBooking || mongoose.model('EventBookin
 export async function POST(request: NextRequest) {
   try {
     await dbConnect()
-    
+
     const bookingData = await request.json()
-    
+
     // Generate booking ID
     const bookingId = `EVT${Date.now()}${Math.random().toString(36).substr(2, 4).toUpperCase()}`
-    
-    const eventBooking = new EventBooking({
+
+    const eventBooking = new (EventBooking as any)({
       ...bookingData,
       bookingId
     })
-    
+
     await eventBooking.save()
-    
+
     return NextResponse.json({
       success: true,
       bookingId,
@@ -92,17 +92,17 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     await dbConnect()
-    
+
     const { searchParams } = new URL(request.url)
     const userId = searchParams.get('userId')
     const eventId = searchParams.get('eventId')
-    
+
     let query: any = {}
     if (userId) query.userId = userId
     if (eventId) query.eventId = parseInt(eventId)
-    
-    const bookings = await EventBooking.find(query).sort({ createdAt: -1 })
-    
+
+    const bookings = await (EventBooking as any).find(query).sort({ createdAt: -1 })
+
     return NextResponse.json({
       success: true,
       bookings
