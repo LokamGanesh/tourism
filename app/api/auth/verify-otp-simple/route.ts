@@ -90,9 +90,13 @@ export async function POST(request: NextRequest) {
 
       const hashedPassword = await bcrypt.hash(userData.password, 12)
 
+      // Format mobile number with +91 prefix if provided
+      const formattedMobile = userData.mobile ? `+91${userData.mobile}` : undefined
+
       const newUser = new User({
         email: normalizedEmail,
         name: userData.name,
+        mobile: formattedMobile,
         password: hashedPassword,
         role: userData.role,
         isVerified: true,

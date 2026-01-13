@@ -73,26 +73,47 @@ export default function AuthPage() {
   }, [resendTimer])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
+    const { name, value } = e.target
+    
+    // Handle mobile number input - only allow digits and limit to 10 digits
+    if (name === 'mobile') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10)
+      setFormData({
+        ...formData,
+        [name]: digitsOnly
+      })
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      })
+    }
   }
 
   const handleSendOTP = async () => {
-    // Use email if available, otherwise use mobile
-    const emailOrMobile = formData.email || formData.mobile
-    
-    if (!emailOrMobile) {
+    // Validate email
+    if (!formData.email) {
       setError('Please enter your email address')
       return
     }
 
     // Validate if it's an email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(emailOrMobile)) {
+    if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address')
       return
+    }
+
+    // Validate mobile number for signup
+    if (!isLogin) {
+      if (!formData.mobile) {
+        setError('Please enter your mobile number')
+        return
+      }
+      if (formData.mobile.length !== 10) {
+        setError('Mobile number must be exactly 10 digits')
+        return
+      }
     }
 
     setLoading(true)
@@ -105,7 +126,7 @@ export default function AuthPage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          email: emailOrMobile.toLowerCase().trim(),
+          email: formData.email.toLowerCase().trim(),
           type: isLogin ? 'login' : 'signup'
         })
       })
@@ -138,19 +159,16 @@ export default function AuthPage() {
     setError('')
 
     try {
-      // Use email if available, otherwise use mobile (which should contain email)
-      const emailOrMobile = formData.email || formData.mobile
-      
-      if (!emailOrMobile) {
+      if (!formData.email) {
         setError('Email is required')
         setLoading(false)
         return
       }
 
-      console.log('Verifying OTP with email:', emailOrMobile)
+      console.log('Verifying OTP with email:', formData.email)
       
       const payload: any = {
-        email: emailOrMobile.toLowerCase().trim(),
+        email: formData.email.toLowerCase().trim(),
         otp: otp,
         type: isLogin ? 'login' : 'signup'
       }
@@ -159,7 +177,8 @@ export default function AuthPage() {
         const actualRole = selectedRole === 'others' ? selectedSubRole : selectedRole;
         payload.userData = {
           name: formData.name,
-          email: emailOrMobile.toLowerCase().trim(), // Use the same email
+          email: formData.email.toLowerCase().trim(), // Use the same email
+          mobile: formData.mobile, // Send mobile without +91, backend will add it
           password: formData.password,
           role: actualRole,
           ...(actualRole === 'travel_provider' && {
@@ -625,18 +644,25 @@ export default function AuthPage() {
 
             {!isLogin && (
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-1">
-                  Mobile Number (Optional)
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Mobile Number
                 </label>
-                <input
-                  type="tel"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={handleInputChange}
-                  placeholder="+91 9876543210"
-                  disabled={otpStep}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 text-gray-900 placeholder-gray-400"
-                />
+                <div className="relative">
+                  <span className="absolute left-4 top-3.5 text-gray-600 font-medium">+91</span>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    value={formData.mobile}
+                    onChange={handleInputChange}
+                    placeholder="9876543210"
+                    required
+                    disabled={otpStep}
+                    maxLength={10}
+                    pattern="[0-9]{10}"
+                    className="w-full pl-14 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-50 disabled:text-gray-500 text-gray-900 placeholder-gray-400"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Enter 10-digit mobile number without country code</p>
               </div>
             )}
 
