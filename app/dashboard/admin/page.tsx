@@ -407,6 +407,17 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <Link 
+            href="/dashboard/admin/manage"
+            className="inline-flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <MapPin className="h-5 w-5" />
+            <span>Manage Places, Hotels, Restaurants & Events</span>
+          </Link>
+        </div>
+
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow-sm">
           <div className="border-b border-gray-200">

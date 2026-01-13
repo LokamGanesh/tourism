@@ -9,7 +9,12 @@
     "lint": "next lint",
     "init-db": "node scripts/init-default-users.js",
     "check-setup": "node scripts/check-setup.js",
-    "test-email": "node scripts/test-email.js"
+    "test-email": "node scripts/test-email.js",
+    "setup-uploads": "node scripts/setup-uploads.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:push": "prisma db push",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -32,6 +37,8 @@
     "leaflet-control-geocoder": "^2.4.0",
     "leaflet-routing-machine": "^3.2.12",
     "lucide-react": "^0.292.0",
+    "@prisma/client": "^6.2.0",
+    "pg": "^8.13.1",
     "mongodb": "^6.19.0",
     "mongoose": "^8.18.1",
     "multer": "^2.0.2",
@@ -57,10 +64,12 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/leaflet": "^1.9.8",
     "@types/node": "^20.8.7",
+    "@types/pg": "^8.11.10",
     "@types/react": "^18.2.31",
     "@types/react-dom": "^18.2.14",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.1",
+    "prisma": "^6.2.0",
     "typescript": "^5.2.2"
   }
 }

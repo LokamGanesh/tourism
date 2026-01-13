@@ -58,3 +58,11 @@ coverage/
 # Package lock files (optional - some prefer to keep these)
 # package-lock.json
 # yarn.lock
+
+# Uploaded images
+public/uploads/
+
+# Prisma
+.prisma/
+prisma/migrations/dev.db
+prisma/migrations/dev.db-journal

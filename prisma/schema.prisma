@@ -1,0 +1,435 @@
+// Prisma Schema for Jharkhand Tourism Platform
+// This replaces MongoDB/Mongoose with PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum UserRole {
+  tourist
+  travel_guide
+  admin
+  government
+  travel_provider
+  hotel_provider
+  restaurant_provider
+}
+
+enum BusinessType {
+  travel_agency
+  tour_operator
+}
+
+enum HotelType {
+  hotel
+  resort
+  guesthouse
+  lodge
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  cancelled
+  completed
+}
+
+enum PaymentStatus {
+  pending
+  completed
+  failed
+  refunded
+}
+
+// Main User Model
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  mobile        String?
+  password      String
+  name          String
+  role          UserRole
+  isVerified    Boolean  @default(false)
+  otp           String?
+  otpExpiry     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Tourist specific fields
+  interests     String[]
+  budget        Float?
+  travelStyle   String?
+
+  // Travel Guide specific fields
+  licenseNumber String?
+  experience    Int?
+  languages     String[]
+  specializations String[]
+  rating        Float    @default(0)
+  totalReviews  Int      @default(0)
+  totalTrips    Int      @default(0)
+  isApproved    Boolean  @default(false)
+  location      String?
+  bio           String?
+  profileImage  String?
+
+  // Admin specific fields
+  permissions   String[]
+  department    String?
+  position      String?
+  accessLevel   Int?
+
+  // Provider specific fields
+  businessName     String?
+  businessType     BusinessType?
+  hotelName        String?
+  hotelType        HotelType?
+  restaurantName   String?
+  cuisineType      String[]
+  address          String?
+  description      String?
+  services         String[]
+  amenities        String[]
+  specialties      String[]
+  images           String[]
+  priceRangeMin    Float?
+  priceRangeMax    Float?
+
+  // Relations
+  certificates      Certificate[]
+  vehicles          Vehicle[]
+  drivers           Driver[]
+  travels           Travel[]
+  bookings          Booking[]
+  hotelBookings     HotelBooking[]
+  restaurantBookings RestaurantBooking[]
+  travelPackages    TravelPackage[]
+  rooms             Room[]
+  menuItems         MenuItem[]
+  eventBookings     EventBooking[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isApproved])
+}
+
+model Certificate {
+  id         String   @id @default(uuid())
+  name       String
+  url        String
+  isVerified Boolean  @default(false)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
+model OTP {
+  id        String   @id @default(uuid())
+  email     String
+  otp       String
+  type      String   // 'signup' or 'login'
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
+model Vehicle {
+  id              String   @id @default(uuid())
+  type            String
+  model           String
+  registrationNo  String   @unique
+  capacity        Int
+  amenities       String[]
+  images          String[]
+  pricePerDay     Float
+  isAvailable     Boolean  @default(true)
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isAvailable])
+}
+
+model Driver {
+  id            String   @id @default(uuid())
+  name          String
+  licenseNumber String   @unique
+  experience    Int
+  languages     String[]
+  rating        Float    @default(0)
+  isAvailable   Boolean  @default(true)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isAvailable])
+}
+
+model Travel {
+  id              String   @id @default(uuid())
+  name            String
+  description     String
+  destination     String
+  duration        Int      // in days
+  price           Float
+  images          String[]
+  inclusions      String[]
+  exclusions      String[]
+  itinerary       Json
+  maxGroupSize    Int
+  availableDates  DateTime[]
+  rating          Float    @default(0)
+  totalReviews    Int      @default(0)
+  isActive        Boolean  @default(true)
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings        Booking[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([destination])
+}
+
+model Booking {
+  id              String        @id @default(uuid())
+  travelId        String
+  travel          Travel        @relation(fields: [travelId], references: [id])
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  bookingDate     DateTime
+  numberOfPeople  Int
+  totalAmount     Float
+  status          BookingStatus @default(pending)
+  paymentStatus   PaymentStatus @default(pending)
+  paymentIntentId String?
+  specialRequests String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([travelId])
+  @@index([status])
+}
+
+model Place {
+  id          String   @id @default(uuid())
+  name        String
+  location    String
+  description String
+  category    String
+  images      String[]
+  coordinates Json     // {lat: number, lng: number}
+  rating      Float    @default(0)
+  reviews     Int      @default(0)
+  entryFee    Float?
+  timings     String?
+  bestSeason  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([location])
+}
+
+model Hotel {
+  id          String   @id @default(uuid())
+  name        String
+  type        HotelType
+  address     String
+  description String
+  amenities   String[]
+  images      String[]
+  coordinates Json
+  rating      Float    @default(0)
+  totalReviews Int     @default(0)
+  priceRangeMin Float
+  priceRangeMax Float
+  isActive    Boolean  @default(true)
+  rooms       Room[]
+  bookings    HotelBooking[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+}
+
+model Room {
+  id          String   @id @default(uuid())
+  hotelId     String
+  hotel       Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  roomType    String
+  capacity    Int
+  price       Float
+  amenities   String[]
+  images      String[]
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([hotelId])
+  @@index([userId])
+  @@index([isAvailable])
+}
+
+model HotelBooking {
+  id              String        @id @default(uuid())
+  hotelId         String
+  hotel           Hotel         @relation(fields: [hotelId], references: [id])
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  checkInDate     DateTime
+  checkOutDate    DateTime
+  numberOfRooms   Int
+  numberOfGuests  Int
+  totalAmount     Float
+  status          BookingStatus @default(pending)
+  paymentStatus   PaymentStatus @default(pending)
+  paymentIntentId String?
+  specialRequests String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([hotelId])
+  @@index([status])
+}
+
+model Restaurant {
+  id          String   @id @default(uuid())
+  name        String
+  cuisineType String[]
+  address     String
+  description String
+  specialties String[]
+  images      String[]
+  coordinates Json
+  rating      Float    @default(0)
+  totalReviews Int     @default(0)
+  priceRangeMin Float
+  priceRangeMax Float
+  isActive    Boolean  @default(true)
+  menuItems   MenuItem[]
+  bookings    RestaurantBooking[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+model MenuItem {
+  id           String     @id @default(uuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User?      @relation(fields: [userId], references: [id])
+  name         String
+  description  String
+  price        Float
+  category     String
+  image        String?
+  isAvailable  Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([restaurantId])
+  @@index([userId])
+  @@index([category])
+}
+
+model RestaurantBooking {
+  id              String        @id @default(uuid())
+  restaurantId    String
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id])
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  bookingDate     DateTime
+  bookingTime     String
+  numberOfGuests  Int
+  specialRequests String?
+  status          BookingStatus @default(pending)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([restaurantId])
+  @@index([status])
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  location    String
+  startDate   DateTime
+  endDate     DateTime
+  category    String
+  images      String[]
+  ticketPrice Float?
+  maxCapacity Int?
+  organizer   String
+  contactInfo String?
+  isActive    Boolean  @default(true)
+  bookings    EventBooking[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+  @@index([startDate])
+}
+
+model EventBooking {
+  id              String        @id @default(uuid())
+  eventId         String
+  event           Event         @relation(fields: [eventId], references: [id])
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  numberOfTickets Int
+  totalAmount     Float
+  status          BookingStatus @default(pending)
+  paymentStatus   PaymentStatus @default(pending)
+  paymentIntentId String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([status])
+}
+
+model TravelPackage {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  duration    Int
+  price       Float
+  images      String[]
+  inclusions  String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isActive])
+}

@@ -1,7 +1,13 @@
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
+// Use a consistent JWT secret - ensure it's loaded from environment
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
+
+// Log warning if using fallback secret (helps debug issues)
+if (!process.env.JWT_SECRET) {
+  console.warn('⚠️  WARNING: JWT_SECRET not found in environment variables. Using fallback secret.')
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return await bcryptjs.hash(password, 12)
