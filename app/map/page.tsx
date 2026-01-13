@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Navigation, MapPin, Volume2, VolumeX, Play, Square, RotateCcw } from 'lucide-react'
 import Navbar from '../components/Navbar'
@@ -11,7 +11,7 @@ interface LocationData {
   address: string
 }
 
-export default function MapPage() {
+function MapContent() {
   const searchParams = useSearchParams()
   const [location, setLocation] = useState<LocationData | null>(null)
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
@@ -465,5 +465,20 @@ export default function MapPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function MapPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading map...</p>
+        </div>
+      </div>
+    }>
+      <MapContent />
+    </Suspense>
   )
 }

@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Jharkhand Tourism - Explore the Heart of India',
   description: 'Discover the beautiful tourist destinations in Jharkhand with interactive maps, reviews, and personalized travel planning.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({

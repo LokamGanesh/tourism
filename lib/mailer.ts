@@ -1,22 +1,32 @@
 import nodemailer from 'nodemailer'
 
-// Create transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // You can change this to other services like 'outlook', 'yahoo', etc.
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD, // Use App Password for Gmail
-  },
-})
+// Create transporter lazily to avoid issues during build
+let transporter: nodemailer.Transporter | null = null
 
-// Verify transporter configuration
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Email transporter error:', error)
-  } else {
-    console.log('Email server is ready to send messages')
+const getTransporter = () => {
+  if (!transporter) {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+      console.error('Email credentials not configured. Please set EMAIL_USER and EMAIL_PASSWORD environment variables.')
+      throw new Error('Email credentials not configured')
+    }
+    
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    })
+    
+    // Verify transporter configuration (async, won't block)
+    transporter.verify().then(() => {
+      console.log('Email server is ready to send messages')
+    }).catch((error) => {
+      console.error('Email transporter error:', error)
+    })
   }
-})
+  return transporter
+}
 
 // Generate OTP
 export const generateOTP = (): string => {
@@ -26,6 +36,7 @@ export const generateOTP = (): string => {
 // Send OTP via email
 export const sendOTPEmail = async (email: string, otp: string): Promise<boolean> => {
   try {
+    const transporter = getTransporter()
     const mailOptions = {
       from: {
         name: 'Jharkhand Tourism',
@@ -136,6 +147,7 @@ export const sendOTPEmail = async (email: string, otp: string): Promise<boolean>
 // Send welcome email
 export const sendWelcomeEmail = async (email: string, name: string): Promise<boolean> => {
   try {
+    const transporter = getTransporter()
     const mailOptions = {
       from: {
         name: 'Jharkhand Tourism',
