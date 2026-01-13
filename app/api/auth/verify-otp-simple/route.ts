@@ -223,8 +223,22 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Verify OTP error:', error)
+    
+    // Provide more helpful error messages
+    let errorMessage = 'Internal server error'
+    if (error instanceof Error) {
+      errorMessage = error.message
+      
+      // Check for MongoDB connection issues
+      if (error.message.includes('ECONNREFUSED') || error.message.includes('connect')) {
+        errorMessage = 'Database connection failed. Please ensure MongoDB is running or configured correctly.'
+      } else if (error.message.includes('buffering timed out')) {
+        errorMessage = 'Database connection timeout. Please check your MongoDB configuration.'
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error: ' + (error instanceof Error ? error.message : 'Unknown error') },
+      { error: errorMessage },
       { status: 500 }
     )
   }

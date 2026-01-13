@@ -60,8 +60,22 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Send OTP error:', error)
+    
+    // Provide more helpful error messages
+    let errorMessage = 'Internal server error'
+    if (error instanceof Error) {
+      errorMessage = error.message
+      
+      // Check for common issues
+      if (error.message.includes('Email credentials not configured')) {
+        errorMessage = 'Email service not configured. Please contact administrator.'
+      } else if (error.message.includes('EAUTH') || error.message.includes('Invalid login')) {
+        errorMessage = 'Email authentication failed. Please contact administrator.'
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error: ' + (error instanceof Error ? error.message : 'Unknown error') },
+      { error: errorMessage },
       { status: 500 }
     )
   }
