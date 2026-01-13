@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import dbConnect from '@/lib/mongodb'
 import User from '@/lib/models/User'
+import OTP from '@/lib/models/OTP'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
