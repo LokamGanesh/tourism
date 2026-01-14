@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       query.category = category
     }
     
-    const places = await Place.find(query).sort({ createdAt: -1 })
+    const places = await (Place as any).find(query).sort({ createdAt: -1 })
     
     return NextResponse.json({ 
       success: true,

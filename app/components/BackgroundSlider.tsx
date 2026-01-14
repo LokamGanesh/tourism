@@ -13,19 +13,17 @@ export default function BackgroundSlider({ children, className = '' }: Backgroun
 
   // Beautiful Jharkhand tourism and nature images with moving effects
   const images = [
-    // Specific Jharkhand tourism themed images
-    'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1920&h=1080&fit=crop&q=tiger', // Tiger for wildlife
-    'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1920&h=1080&fit=crop&q=waterfall', // Waterfall
-    'https://images.unsplash.com/photo-1609920658906-8223bd289001?w=1920&h=1080&fit=crop&q=temple', // Hindu temple
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=mountain', // Mountain landscape
-    'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=1920&h=1080&fit=crop&q=waterfall', // Another waterfall
-    'https://images.unsplash.com/photo-1549366021-9f761d040a94?w=1920&h=1080&fit=crop&q=wildlife', // Wildlife sanctuary
-    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&h=1080&fit=crop&q=forest', // Dense forest
-    'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=1920&h=1080&fit=crop&q=temple', // Temple architecture
-    'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=1920&h=1080&fit=crop&q=nature', // Nature landscape
-    'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1920&h=1080&fit=crop&q=art', // Traditional art
-    'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1920&h=1080&fit=crop&q=festival', // Cultural festival
-    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&h=1080&fit=crop&q=handicraft', // Traditional crafts
+    // Stunning Jharkhand landscapes and tourism
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Mountain landscape
+    'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1920&h=1080&fit=crop&q=85', // Scenic waterfall
+    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&h=1080&fit=crop&q=85', // Dense forest
+    'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&h=1080&fit=crop&q=85', // Adventure travel
+    'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&h=1080&fit=crop&q=85', // Lake and nature
+    'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1920&h=1080&fit=crop&q=85', // Camping adventure
+    'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=1920&h=1080&fit=crop&q=85', // Tribal culture
+    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920&h=1080&fit=crop&q=85', // Sunset landscape
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Hills and valleys
+    'https://images.unsplash.com/photo-1542401886-65d6c61db217?w=1920&h=1080&fit=crop&q=85', // Wildlife safari
   ]
 
   useEffect(() => {

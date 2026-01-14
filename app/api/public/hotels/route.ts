@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       query.location = { $regex: location, $options: 'i' }
     }
     
-    const hotels = await Hotel.find(query).sort({ createdAt: -1 })
+    const hotels = await (Hotel as any).find(query).sort({ createdAt: -1 })
     
     return NextResponse.json({ 
       success: true,

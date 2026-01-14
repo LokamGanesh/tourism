@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       query.location = { $regex: location, $options: 'i' }
     }
     
-    const restaurants = await Restaurant.find(query).sort({ createdAt: -1 })
+    const restaurants = await (Restaurant as any).find(query).sort({ createdAt: -1 })
     
     return NextResponse.json({ 
       success: true,
