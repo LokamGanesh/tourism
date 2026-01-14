@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       query.startDate = { $gte: new Date() }
     }
     
-    const events = await Event.find(query).sort({ startDate: 1 })
+    const events = await (Event as any).find(query).sort({ startDate: 1 })
     
     return NextResponse.json({ 
       success: true,
